@@ -19,3 +19,12 @@ Recommended runtime inputs:
 - environment variables from [`.env.example`](/Volumes/T9/Code/Keeper%20App/Keeper_APIv1/keeper-service/.env.example)
 
 If the Keeper service API key changes, update the Node API runtime env accordingly.
+
+Cloud Run runtime variables to set:
+
+- `PORT=3000`
+- `KEEPER_SERVICE_URL=http://localhost:8900`
+- `KEEPER_API_KEY=your_generated_api_key_here`
+- `NODE_API_KEY=your_node_api_key_here`
+- `KEEPER_PORT=8900`
+- `KEEPER_CONFIG_PATH=/app/keeper-service/keeper-config.json`
