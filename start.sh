@@ -26,9 +26,32 @@ fi
 
 echo "Starting Keeper Commander service..."
 keeper --config "$KEEPER_CONFIG_PATH" service-start &
+KEEPER_PID=$!
 
 echo "Waiting for Keeper Commander on port $KEEPER_PORT..."
-sleep 5
+for _ in $(seq 1 30); do
+  if ! kill -0 "$KEEPER_PID" 2>/dev/null; then
+    echo "Keeper Commander exited before opening port $KEEPER_PORT"
+    exit 1
+  fi
+
+  if bash -c "exec 3<>/dev/tcp/127.0.0.1/$KEEPER_PORT" 2>/dev/null; then
+    exec 3>&-
+    exec 3<&-
+    echo "Keeper Commander is listening on port $KEEPER_PORT"
+    break
+  fi
+
+  sleep 1
+done
+
+if ! bash -c "exec 3<>/dev/tcp/127.0.0.1/$KEEPER_PORT" 2>/dev/null; then
+  echo "Keeper Commander did not open port $KEEPER_PORT in time"
+  exit 1
+fi
+
+exec 3>&-
+exec 3<&-
 
 echo "Starting Node API..."
 export PORT
