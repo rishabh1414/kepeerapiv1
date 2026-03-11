@@ -1,0 +1,5 @@
+node-api/node_modules/
+node-api/.env
+keeper-service/venv/
+keeper-service/keeper-config.json
+.DS_Store
